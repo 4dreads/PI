@@ -1,0 +1,41 @@
+# PI
+-- Consulta para obtener el año con más horas jugadas para un género dado
+SELECT genero, MAX(AnoLanzamiento) AS anio_max_horas_jugadas
+FROM juegos
+WHERE genero = 'Aventura' -- Reemplaza 'Aventura' con el género deseado
+GROUP BY genero;
+
+-- Consulta para obtener el usuario con más horas jugadas para un género y lista de horas por año
+SELECT usuario, anio, SUM(horas_jugadas) AS total_horas_jugadas
+FROM registros_jugadas
+WHERE genero = 'Aventura' -- Reemplaza 'Aventura' con el género deseado
+GROUP BY usuario, anio
+ORDER BY total_horas_jugadas DESC
+LIMIT 1;
+
+-- Consulta para obtener el top 3 de juegos más recomendados por usuarios para un año dado
+SELECT nombre, JuegoID
+FROM juegos
+WHERE AnoLanzamiento = 2022
+ORDER BY recomendaciones DESC
+LIMIT 3;
+
+
+-- Consulta para obtener el top 3 de desarrolladoras con juegos menos recomendados por usuarios para un año dado
+SELECT d.nombre, d.DesarrolladoraID
+FROM desarrolladoras d
+INNER JOIN juegos j ON d.DesarrolladoraID = j.DesarrolladoraID
+WHERE j.AnoLanzamiento = 2022 -- Reemplaza '2022' con el año deseado
+ORDER BY j.recomendaciones ASC
+LIMIT 3;
+
+
+-- Consulta para obtener el análisis de sentimiento por usuario
+SELECT UsuarioID, 
+        SUM(CASE WHEN sentimiento = 'Negative' THEN 1 ELSE 0 END) AS Negative,
+        SUM(CASE WHEN sentimiento = 'Neutral' THEN 1 ELSE 0 END) AS Neutral,
+        SUM(CASE WHEN sentimiento = 'Positive' THEN 1 ELSE 0 END) AS Positive
+FROM resenas
+WHERE UsuarioID = 'NombreUsuario' -- Reemplaza 'NombreUsuario' con el nombre deseado
+GROUP BY UsuarioID
+LIMIT 0, 100;
