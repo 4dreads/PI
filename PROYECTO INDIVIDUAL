@@ -1,4 +1,4 @@
-# PIo1
+# PI01
 
 DROP DATABASE IF EXISTS steam_games;
 
